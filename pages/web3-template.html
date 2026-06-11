@@ -16,8 +16,12 @@
   <link rel="canonical" href="https://createwithalli.com/pages/web3-template.html" />
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="../web3-template.css" />
-  <!-- ethers.js v6 — must load before web3-template.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js" defer></script>
+  <!-- ethers.js v6 — SRI hash locks the exact file served by the CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"
+          integrity="sha384-xscEkekms/SQq5SFOOIcbfflRgUup5sdW1duER21mIKxWcHi9Xyv37aIOSrCepJf"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+          defer></script>
   <script src="../web3-template.js" defer></script>
 </head>
 <body>

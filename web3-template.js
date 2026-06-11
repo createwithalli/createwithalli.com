@@ -220,6 +220,12 @@ class WalletManager {
   }
 }
 
+/* ── HTML ESCAPE ─────────────────────────── */
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 /* ── RENDER HELPERS ──────────────────────── */
 
 function renderTicker(prices) {
@@ -323,10 +329,10 @@ function renderTokenResult(data) {
   const ch = fmtChange(data.usd_24h_change);
   el.innerHTML = `<div class="token-result-card">
     <div class="trc-header">
-      ${data.thumb ? `<img src="${data.thumb}" alt="${data.name}" class="trc-img" loading="lazy" />` : '<span style="font-size:1.8rem">🪙</span>'}
+      ${data.thumb && data.thumb.startsWith('https://') ? `<img src="${escHtml(data.thumb)}" alt="${escHtml(data.name)}" class="trc-img" loading="lazy" />` : '<span style="font-size:1.8rem">🪙</span>'}
       <div>
-        <div class="trc-name">${data.name || data.symbol}</div>
-        <div class="trc-sym">${data.symbol?.toUpperCase() ?? ''}</div>
+        <div class="trc-name">${escHtml(data.name || data.symbol)}</div>
+        <div class="trc-sym">${escHtml(data.symbol?.toUpperCase() ?? '')}</div>
       </div>
     </div>
     <div class="trc-price">${fmtPrice(data.usd)}</div>
@@ -448,7 +454,12 @@ async function initWeb3Template() {
         </div>`;
       }
     } catch (err) {
-      if (resultEl) resultEl.innerHTML = `<p class="sig-error">${err.message}</p>`;
+      if (resultEl) {
+        const p = document.createElement('p');
+        p.className = 'sig-error';
+        p.textContent = err.message || 'Signing failed';
+        resultEl.replaceChildren(p);
+      }
     }
   });
 }
